@@ -1,0 +1,39 @@
+title: "My Homelab Dashboard"
+subtitle: "Central hub for all your services"
+
+categories:
+  - name: "Media"
+    description: "Entertainment and media services"
+  - name: "Infrastructure"
+    description: "Core infrastructure and networking"
+  - name: "Automation"
+    description: "Home automation and monitoring"
+
+services:
+  - name: "Plex"
+    url: "http://localhost:32400"
+    description: "Media streaming server"
+    category: "Media"
+    status_url: "http://localhost:32400/web"
+    tags: ["streaming", "media"]
+
+  - name: "Portainer"
+    url: "http://localhost:9000"
+    description: "Docker container management"
+    category: "Infrastructure"
+    status_url: "http://localhost:9000"
+    tags: ["docker", "management"]
+
+  - name: "Home Assistant"
+    url: "http://localhost:8123"
+    description: "Home automation platform"
+    category: "Automation"
+    status_url: "http://localhost:8123"
+    tags: ["smart-home", "automation"]
+
+  - name: "Grafana"
+    url: "http://localhost:3000"
+    description: "Monitoring and analytics"
+    category: "Automation"
+    status_url: "http://localhost:3000"
+    tags: ["monitoring", "dashboards"]

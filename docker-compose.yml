@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  labdash:
+    build: .
+    container_name: labdash
+    ports:
+      - "4567:4567"
+    volumes:
+      - ./dashboard.yml:/config/dashboard.yml:ro
+    environment:
+      - CONFIG_PATH=/config/dashboard.yml
+      - RACK_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:4567/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s

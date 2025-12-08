@@ -1,0 +1,33 @@
+<div class="service-card" data-url="<%= service['url'] %>">
+  <a href="<%= service['url'] %>" target="_blank" rel="noopener noreferrer" class="service-link">
+    <div class="service-header">
+      <% if service['icon'] %>
+        <img src="<%= service['icon'] %>" alt="<%= service['name'] %>" class="service-icon">
+      <% else %>
+        <div class="service-icon-placeholder">
+          <%= service['name'][0].upcase %>
+        </div>
+      <% end %>
+      <h3 class="service-name"><%= service['name'] %></h3>
+    </div>
+    
+    <% if service['description'] %>
+      <p class="service-description"><%= service['description'] %></p>
+    <% end %>
+    
+    <% if service['status_url'] %>
+      <div class="service-status" data-status-url="<%= service['status_url'] %>">
+        <span class="status-indicator status-loading"></span>
+        <span class="status-text">Checking...</span>
+      </div>
+    <% end %>
+    
+    <% if service['tags'] && service['tags'].any? %>
+      <div class="service-tags">
+        <% service['tags'].each do |tag| %>
+          <span class="tag"><%= tag %></span>
+        <% end %>
+      </div>
+    <% end %>
+  </a>
+</div>
