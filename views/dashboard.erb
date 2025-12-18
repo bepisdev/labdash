@@ -15,6 +15,22 @@
       <% end %>
     </header>
     
+    <div class="toolbar">
+      <div class="filter-group">
+        <label for="tag-filter" class="filter-label">Filter by tag:</label>
+        <select id="tag-filter" class="tag-filter-dropdown">
+          <option value="">All Services</option>
+          <% 
+            # Collect all unique tags from all services
+            all_tags = categories.flat_map { |cat| (cat['services'] || []).flat_map { |s| s['tags'] || [] } }.uniq.sort
+          %>
+          <% all_tags.each do |tag| %>
+            <option value="<%= tag %>"><%= tag %></option>
+          <% end %>
+        </select>
+      </div>
+    </div>
+    
     <main>
       <% if categories.empty? %>
         <!-- No categories configured -->

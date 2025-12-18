@@ -1,4 +1,4 @@
-<div class="service-card" data-url="<%= service['url'] %>">
+<div class="service-card" data-url="<%= service['url'] %>" data-tags="<%= (service['tags'] || []).join(',') %>">
   <a href="<%= service['url'] %>" target="_blank" rel="noopener noreferrer" class="service-link">
     <div class="service-header">
       <% if service['icon'] %>
