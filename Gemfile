@@ -10,4 +10,6 @@ gem 'json', '~> 2.7'
 
 group :development do
   gem 'rerun', '~> 0.14'
+  gem "ruby-lsp", "~> 0.26.4"
 end
+
