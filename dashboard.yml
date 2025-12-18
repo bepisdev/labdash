@@ -5,36 +5,33 @@ background_image: "https://w.wallhaven.cc/full/ne/wallhaven-nevkvw.jpg"
 categories:
   - name: "Media"
     description: "Entertainment and media services"
+    services:
+      - name: "Plex"
+        url: "http://localhost:32400"
+        description: "Media streaming server"
+        status_url: "http://localhost:32400/web"
+        tags: ["streaming", "media"]
+
   - name: "Infrastructure"
     description: "Core infrastructure and networking"
+    services:
+      - name: "Portainer"
+        url: "http://localhost:9000"
+        description: "Docker container management"
+        status_url: "http://localhost:9000"
+        tags: ["docker", "management"]
+
   - name: "Automation"
     description: "Home automation and monitoring"
+    services:
+      - name: "Home Assistant"
+        url: "http://localhost:8123"
+        description: "Home automation platform"
+        status_url: "http://localhost:8123"
+        tags: ["smart-home", "automation"]
 
-services:
-  - name: "Plex"
-    url: "http://localhost:32400"
-    description: "Media streaming server"
-    category: "Media"
-    status_url: "http://localhost:32400/web"
-    tags: ["streaming", "media"]
-
-  - name: "Portainer"
-    url: "http://localhost:9000"
-    description: "Docker container management"
-    category: "Infrastructure"
-    status_url: "http://localhost:9000"
-    tags: ["docker", "management"]
-
-  - name: "Home Assistant"
-    url: "http://localhost:8123"
-    description: "Home automation platform"
-    category: "Automation"
-    status_url: "http://localhost:8123"
-    tags: ["smart-home", "automation"]
-
-  - name: "Grafana"
-    url: "http://localhost:3000"
-    description: "Monitoring and analytics"
-    category: "Automation"
-    status_url: "http://localhost:3000"
-    tags: ["monitoring", "dashboards"]
+      - name: "Grafana"
+        url: "http://localhost:3000"
+        description: "Monitoring and analytics"
+        status_url: "http://localhost:3000"
+        tags: ["monitoring", "dashboards"]

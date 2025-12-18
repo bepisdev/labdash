@@ -26,13 +26,14 @@ module LabDash
       erb :dashboard, locals: { 
         config: @config,
         title: @config['title'] || 'LabDash',
-        categories: @config['categories'] || [],
-        services: @config['services'] || []
+        categories: @config['categories'] || []
       }
     end
     
     get '/api/services' do
-      json @config['services'] || []
+      # Flatten services from all categories
+      all_services = (@config['categories'] || []).flat_map { |cat| cat['services'] || [] }
+      json all_services
     end
     
     get '/api/config' do

@@ -17,40 +17,27 @@
     
     <main>
       <% if categories.empty? %>
-        <!-- No categories, show all services in a single grid -->
+        <!-- No categories configured -->
         <section class="services-grid">
-          <% services.each do |service| %>
-            <%= erb :service_card, locals: { service: service } %>
-          <% end %>
+          <p class="category-description">No categories configured.</p>
         </section>
       <% else %>
         <!-- Show services organized by categories -->
         <% categories.each do |category| %>
-          <section class="category-section">
-            <h2 class="category-title"><%= category['name'] %></h2>
-            <% if category['description'] %>
-              <p class="category-description"><%= category['description'] %></p>
-            <% end %>
-            <div class="services-grid">
-              <% category_services = services.select { |s| s['category'] == category['name'] } %>
-              <% category_services.each do |service| %>
-                <%= erb :service_card, locals: { service: service } %>
+          <% category_services = category['services'] || [] %>
+          <% unless category_services.empty? %>
+            <section class="category-section">
+              <h2 class="category-title"><%= category['name'] %></h2>
+              <% if category['description'] %>
+                <p class="category-description"><%= category['description'] %></p>
               <% end %>
-            </div>
-          </section>
-        <% end %>
-        
-        <!-- Uncategorized services -->
-        <% uncategorized = services.select { |s| s['category'].nil? || s['category'].empty? } %>
-        <% unless uncategorized.empty? %>
-          <section class="category-section">
-            <h2 class="category-title">Other Services</h2>
-            <div class="services-grid">
-              <% uncategorized.each do |service| %>
-                <%= erb :service_card, locals: { service: service } %>
-              <% end %>
-            </div>
-          </section>
+              <div class="services-grid">
+                <% category_services.each do |service| %>
+                  <%= erb :service_card, locals: { service: service } %>
+                <% end %>
+              </div>
+            </section>
+          <% end %>
         <% end %>
       <% end %>
     </main>
