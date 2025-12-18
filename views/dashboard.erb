@@ -6,7 +6,7 @@
   <title><%= title %></title>
   <link rel="stylesheet" href="/css/styles.css">
 </head>
-<body>
+<body<% if config['background_image'] && !config['background_image'].empty? %> style="background-image: url('<%= config['background_image'] %>');"<% end %>>
   <div class="container">
     <header>
       <h1><%= title %></h1>
