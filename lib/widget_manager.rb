@@ -2,13 +2,21 @@ require_relative 'widgets/base_widget'
 require_relative 'widgets/qbittorrent_widget'
 require_relative 'widgets/radarr_widget'
 require_relative 'widgets/sonarr_widget'
+require_relative 'widgets/jellyfin_widget'
+require_relative 'widgets/bazarr_widget'
+require_relative 'widgets/prowlarr_widget'
+require_relative 'widgets/lidarr_widget'
 
 module LabDash
   class WidgetManager
     WIDGET_CLASSES = {
       'qbittorrent' => Widgets::QBittorrentWidget,
       'radarr' => Widgets::RadarrWidget,
-      'sonarr' => Widgets::SonarrWidget
+      'sonarr' => Widgets::SonarrWidget,
+      'jellyfin' => Widgets::JellyfinWidget,
+      'bazarr' => Widgets::BazarrWidget,
+      'prowlarr' => Widgets::ProwlarrWidget,
+      'lidarr' => Widgets::LidarrWidget
     }.freeze
     
     def initialize(config)

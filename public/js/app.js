@@ -190,6 +190,44 @@ function renderWidgetData(type, data) {
       html += renderStat('Free Space', data.disk_space);
       break;
       
+    case 'jellyfin':
+      html += renderStat('Server', data.server_name || 'Jellyfin');
+      html += renderStat('Movies', data.movie_count);
+      html += renderStat('Series', data.series_count);
+      html += renderStat('Episodes', data.episode_count);
+      html += renderStat('Albums', data.album_count);
+      html += renderStat('Songs', data.song_count);
+      html += renderStat('Active Streams', data.active_streams, true);
+      break;
+      
+    case 'bazarr':
+      html += renderStat('Series Total', data.total_series);
+      html += renderStat('Series w/ Subs', data.series_with_subtitles, true);
+      html += renderStat('Series Missing', data.series_without_subtitles);
+      html += renderStat('Movies Total', data.total_movies);
+      html += renderStat('Movies w/ Subs', data.movies_with_subtitles, true);
+      html += renderStat('Movies Missing', data.movies_without_subtitles);
+      break;
+      
+    case 'prowlarr':
+      html += renderStat('Total Indexers', data.total_indexers);
+      html += renderStat('Enabled', data.enabled_indexers, true);
+      html += renderStat('Disabled', data.disabled_indexers);
+      html += renderStat('Total Queries', data.total_queries);
+      html += renderStat('Total Grabs', data.total_grabs);
+      html += renderStat('Avg Response', data.average_response_time);
+      break;
+      
+    case 'lidarr':
+      html += renderStat('Total Artists', data.total_artists);
+      html += renderStat('Monitored', data.monitored);
+      html += renderStat('Total Albums', data.total_albums);
+      html += renderStat('Tracks Downloaded', data.downloaded_tracks, true);
+      html += renderStat('Missing Tracks', data.missing_tracks);
+      html += renderStat('Upcoming Releases', data.upcoming_releases);
+      html += renderStat('Free Space', data.disk_space);
+      break;
+      
     default:
       html = '<div class="widget-loading">Unknown widget type</div>';
   }

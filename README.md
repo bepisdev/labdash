@@ -174,10 +174,10 @@ services:
 
 #### Widget Options
 - `name` (string, required): Widget display name
-- `type` (string, required): Widget type (`qbittorrent`, `radarr`, or `sonarr`)
+- `type` (string, required): Widget type (`qbittorrent`, `radarr`, `sonarr`, `jellyfin`, `bazarr`, `prowlarr`, or `lidarr`)
 - `url` (string, required): Service URL
 - `enabled` (boolean, optional): Enable/disable widget (default: `true`)
-- `api_key` (string, optional): API key for authenticated services (Radarr, Sonarr)
+- `api_key` (string, optional): API key for authenticated services (Radarr, Sonarr, Jellyfin, Bazarr, Prowlarr, Lidarr)
 - `username` (string, optional): Username for basic auth (qBittorrent)
 - `password` (string, optional): Password for basic auth (qBittorrent)
 
@@ -219,28 +219,54 @@ widgets:
     api_key: "your_api_key"
     enabled: true
 ```
-    description: "Docker management"
-    category: "Development"
-    status_url: "http://portainer.local:9000"
-    tags: ["docker", "containers"]
+
+#### Jellyfin Widget
+Shows Jellyfin media server statistics including movies, series, albums, and active streams.
+
+```yaml
+widgets:
+  - name: "Media Server"
+    type: "jellyfin"
+    url: "http://localhost:8096"
+    api_key: "your_api_key"
+    enabled: true
 ```
 
-### Configuration Options
+#### Bazarr Widget
+Displays subtitle management statistics for movies and series.
 
-#### Root Level
-- `title` (string): Dashboard title
-- `subtitle` (string, optional): Subtitle text
-- `categories` (array, optional): Service categories
-- `services` (array): List of services
+```yaml
+widgets:
+  - name: "Subtitles"
+    type: "bazarr"
+    url: "http://localhost:6767"
+    api_key: "your_api_key"
+    enabled: true
+```
 
-#### Service Options
-- `name` (string, required): Service name
-- `url` (string, required): Service URL
-- `description` (string, optional): Service description
-- `category` (string, optional): Category name (must match a defined category)
-- `icon` (string, optional): URL to service icon
-- `status_url` (string, optional): URL to check for service status
-- `tags` (array, optional): List of tags for the service
+#### Prowlarr Widget
+Shows indexer manager statistics including total queries, grabs, and response times.
+
+```yaml
+widgets:
+  - name: "Indexers"
+    type: "prowlarr"
+    url: "http://localhost:9696"
+    api_key: "your_api_key"
+    enabled: true
+```
+
+#### Lidarr Widget
+Displays music library statistics including artists, albums, tracks, and upcoming releases.
+
+```yaml
+widgets:
+  - name: "Music Library"
+    type: "lidarr"
+    url: "http://localhost:8686"
+    api_key: "your_api_key"
+    enabled: true
+```
 
 ## Environment Variables
 
@@ -252,14 +278,10 @@ widgets:
 - `GET /` - Dashboard homepage
 - `GET /api/services` - JSON list of all services
 - `GET /api/config` - Full configuration JSON
+- `GET /api/widgets` - All widget data
+- `GET /api/widgets/:name` - Specific widget data
 - `GET /health` - Health check endpoint
-├── config_loader.rb  # Configuration loader
-│   ├── widget_manager.rb # Widget management
-│   └── widgets/
-│       ├── base_widget.rb      # Base widget class
-│       ├── qbittorrent_widget.rb
-│       ├── radarr_widget.rb
-│       └── sonarr_widget.rb
+
 ## Deployment Examples
 
 ### Docker Compose with Custom Port
@@ -308,7 +330,17 @@ labdash/
 ├── docker-compose.yml    # Docker Compose configuration
 ├── dashboard.yml         # Your configuration (create this)
 ├── lib/
-│   └── config_loader.rb  # Configuration loader
+│   ├── config_loader.rb  # Configuration loader
+│   ├── widget_manager.rb # Widget management
+│   └── widgets/
+│       ├── base_widget.rb         # Base widget class
+│       ├── qbittorrent_widget.rb  # qBittorrent widget
+│       ├── radarr_widget.rb       # Radarr widget
+│       ├── sonarr_widget.rb       # Sonarr widget
+│       ├── jellyfin_widget.rb     # Jellyfin widget
+│       ├── bazarr_widget.rb       # Bazarr widget
+│       ├── prowlarr_widget.rb     # Prowlarr widget
+│       └── lidarr_widget.rb       # Lidarr widget
 ├── views/
 │   ├── dashboard.erb     # Main dashboard view
 │   ├── service_card.erb  # Service card partial
@@ -316,6 +348,9 @@ labdash/
 └── public/
     ├── css/
     │   └── styles.css    # Stylesheet
+    └── js/
+        └── app.js        # Frontend JavaScript
+```
     └── js/
         └── app.js        # Frontend JavaScript
 ```

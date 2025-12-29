@@ -56,3 +56,27 @@ widgets:
     url: "http://localhost:8989"
     api_key: "your_sonarr_api_key_here"
     enabled: true
+
+  - name: "Jellyfin Media Server"
+    type: "jellyfin"
+    url: "http://localhost:8096"
+    api_key: "your_jellyfin_api_key_here"
+    enabled: true
+
+  - name: "Bazarr Subtitles"
+    type: "bazarr"
+    url: "http://localhost:6767"
+    api_key: "your_bazarr_api_key_here"
+    enabled: true
+
+  - name: "Prowlarr Indexers"
+    type: "prowlarr"
+    url: "http://localhost:9696"
+    api_key: "your_prowlarr_api_key_here"
+    enabled: true
+
+  - name: "Lidarr Music"
+    type: "lidarr"
+    url: "http://localhost:8686"
+    api_key: "your_lidarr_api_key_here"
+    enabled: true
