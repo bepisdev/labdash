@@ -3,6 +3,7 @@ require 'sinatra/json'
 require 'yaml'
 require 'json'
 require_relative 'lib/config_loader'
+require_relative 'lib/widget_manager'
 
 module LabDash
   class Application < Sinatra::Base
@@ -17,6 +18,7 @@ module LabDash
     before do
       begin
         @config = settings.config_loader.load
+        @widget_manager = WidgetManager.new(@config)
       rescue => e
         halt 500, erb(:error, locals: { error: "Configuration error: #{e.message}" })
       end
@@ -25,7 +27,8 @@ module LabDash
     get '/' do
       erb :dashboard, locals: { 
         config: @config,
-        title: @config['title'] || 'LabDash',
+        title: @config['title'] || 'LabDash',,
+        widgets: @widget_manager.enabled_widgets
         categories: @config['categories'] || []
       }
     end
@@ -36,7 +39,16 @@ module LabDash
       json all_services
     end
     
-    get '/api/config' do
+    get
+    
+    get '/api/widgets' do
+      json @widget_manager.fetch_all_data
+    end
+    
+    get '/api/widgets/:name' do
+      widget_name = params[:name]
+      json @widget_manager.fetch_widget_data(widget_name)
+    end '/api/config' do
       json @config
     end
     

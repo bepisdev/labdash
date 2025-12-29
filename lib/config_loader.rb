@@ -57,6 +57,18 @@ module LabDash
         raise "Categories must be an array" unless config['categories'].is_a?(Array)
       end
       
+      # Validate widgets
+      if config['widgets']
+        raise "Widgets must be an array" unless config['widgets'].is_a?(Array)
+        
+        config['widgets'].each_with_index do |widget, idx|
+          raise "Widget #{idx} must be a hash" unless widget.is_a?(Hash)
+          raise "Widget #{idx} missing 'name'" unless widget['name']
+          raise "Widget #{idx} missing 'type'" unless widget['type']
+          raise "Widget #{idx} missing 'url'" unless widget['url']
+        end
+      end
+      
       true
     end
   end

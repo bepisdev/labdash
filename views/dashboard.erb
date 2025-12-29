@@ -32,6 +32,16 @@
     </div>
     
     <main>
+      <!-- Widgets Section -->
+      <% if widgets && !widgets.empty? %>
+        <section class="widgets-section">
+          <h2 class="section-title">Dashboard Widgets</h2>
+          <div class="widgets-grid" id="widgets-container">
+            <!-- Widgets will be loaded dynamically via JavaScript -->
+          </div>
+        </section>
+      <% end %>
+      
       <% if categories.empty? %>
         <!-- No categories configured -->
         <section class="services-grid">

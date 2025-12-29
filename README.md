@@ -12,6 +12,7 @@ A lightweight, configurable homelab dashboard built with Ruby and Sinatra. Desig
 - 🏷️ Service tagging
 - 🔍 Custom icons support
 - ⚡ Fast and lightweight
+- 📊 Optional widgets for qBittorrent, Radarr, Sonarr, and more
 
 ## Quick Start
 
@@ -69,6 +70,28 @@ categories:
     description: "Core infrastructure services"
   - name: "Development"
     description: "Development tools and services"
+
+# Optional widgets for displaying real-time data
+widgets:
+  - name: "qBittorrent Stats"
+    type: "qbittorrent"
+    url: "http://qbittorrent.local:8080"
+    enabled: true
+    # Optional authentication
+    # username: "admin"
+    # password: "adminpass"
+
+  - name: "Radarr Library"
+    type: "radarr"
+    url: "http://radarr.local:7878"
+    api_key: "your_radarr_api_key_here"
+    enabled: true
+
+  - name: "Sonarr Library"
+    type: "sonarr"
+    url: "http://sonarr.local:8989"
+    api_key: "your_sonarr_api_key_here"
+    enabled: true
 
 services:
   # Media Services
@@ -138,15 +161,64 @@ services:
     tags: ["dns", "ad-blocking"]
 
   # Development
-  - name: "Gitea"
-    url: "http://gitea.local:3000"
-    description: "Self-hosted Git service"
-    category: "Development"
-    status_url: "http://gitea.local:3000"
-    tags: ["git", "code"]
+- `widgets` (array, optional): Optional widgets for displaying real-time data
 
-  - name: "Portainer"
-    url: "http://portainer.local:9000"
+#### Service Options
+- `name` (string, required): Service name
+- `url` (string, required): Service URL
+- `description` (string, optional): Service description
+- `category` (string, optional): Category name (must match a defined category)
+- `icon` (string, optional): URL to service icon
+- `status_url` (string, optional): URL to check for service status
+- `tags` (array, optional): List of tags for the service
+
+#### Widget Options
+- `name` (string, required): Widget display name
+- `type` (string, required): Widget type (`qbittorrent`, `radarr`, or `sonarr`)
+- `url` (string, required): Service URL
+- `enabled` (boolean, optional): Enable/disable widget (default: `true`)
+- `api_key` (string, optional): API key for authenticated services (Radarr, Sonarr)
+- `username` (string, optional): Username for basic auth (qBittorrent)
+- `password` (string, optional): Password for basic auth (qBittorrent)
+
+### Available Widgets
+
+#### qBittorrent Widget
+Displays download/upload speeds, active torrents, and ratio statistics.
+
+```yaml
+widgets:
+  - name: "Torrent Stats"
+    type: "qbittorrent"
+    url: "http://localhost:8080"
+    enabled: true
+```
+
+#### Radarr Widget
+Shows movie library statistics including total movies, downloads, and upcoming releases.
+
+```yaml
+widgets:
+  - name: "Movies"
+    type: "radarr"
+    url: "http://localhost:7878"
+    api_key: "your_api_key"
+    enabapi/widgets` - All widget data
+- `GET /api/widgets/:name` - Specific widget data
+- `GET /led: true
+```
+
+#### Sonarr Widget
+Displays TV series statistics including episodes, upcoming shows, and queue status.
+
+```yaml
+widgets:
+  - name: "TV Shows"
+    type: "sonarr"
+    url: "http://localhost:8989"
+    api_key: "your_api_key"
+    enabled: true
+```
     description: "Docker management"
     category: "Development"
     status_url: "http://portainer.local:9000"
@@ -181,7 +253,13 @@ services:
 - `GET /api/services` - JSON list of all services
 - `GET /api/config` - Full configuration JSON
 - `GET /health` - Health check endpoint
-
+├── config_loader.rb  # Configuration loader
+│   ├── widget_manager.rb # Widget management
+│   └── widgets/
+│       ├── base_widget.rb      # Base widget class
+│       ├── qbittorrent_widget.rb
+│       ├── radarr_widget.rb
+│       └── sonarr_widget.rb
 ## Deployment Examples
 
 ### Docker Compose with Custom Port

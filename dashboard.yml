@@ -35,3 +35,24 @@ categories:
         description: "Monitoring and analytics"
         status_url: "http://localhost:3000"
         tags: ["monitoring", "dashboards"]
+
+widgets:
+  - name: "qBittorrent Stats"
+    type: "qbittorrent"
+    url: "http://localhost:8080"
+    enabled: true
+    # Optional authentication
+    # username: "admin"
+    # password: "adminpass"
+
+  - name: "Radarr Library"
+    type: "radarr"
+    url: "http://localhost:7878"
+    api_key: "your_radarr_api_key_here"
+    enabled: true
+
+  - name: "Sonarr Library"
+    type: "sonarr"
+    url: "http://localhost:8989"
+    api_key: "your_sonarr_api_key_here"
+    enabled: true

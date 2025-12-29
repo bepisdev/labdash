@@ -3,6 +3,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize tag filter
   initializeTagFilter();
   
+  // Initialize widgets
+  initializeWidgets();
+  
   const statusElements = document.querySelectorAll('.service-status');
   
   statusElements.forEach(element => {
@@ -20,6 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
         checkServiceStatus(statusUrl, element);
       }
     });
+    
+    // Refresh widgets
+    refreshWidgets();
   }, 30000);
 });
 
@@ -93,7 +99,141 @@ function filterServicesByTag(tag) {
     if (visibleCards.length === 0) {
       section.style.display = 'none';
     } else {
-      section.style.display = '';
+ 
+
+// Widget functionality
+async function initializeWidgets() {
+  const widgetsContainer = document.getElementById('widgets-container');
+  if (!widgetsContainer) return;
+  
+  try {
+    const response = await fetch('/api/widgets');
+    const widgetsData = await response.json();
+    
+    // Clear loading state
+    widgetsContainer.innerHTML = '';
+    
+    // Render each widget
+    Object.entries(widgetsData).forEach(([name, widget]) => {
+      renderWidget(name, widget);
+    });
+  } catch (error) {
+    console.error('Failed to load widgets:', error);
+    widgetsContainer.innerHTML = '<div class="widget-error">Failed to load widgets</div>';
+  }
+}
+
+function renderWidget(name, widget) {
+  const widgetsContainer = document.getElementById('widgets-container');
+  if (!widgetsContainer) return;
+  
+  const widgetCard = document.createElement('div');
+  widgetCard.className = 'widget-card';
+  widgetCard.dataset.widgetName = name;
+  
+  const icon = widget.config?.icon || '📊';
+  const displayName = widget.config?.name || name;
+  
+  let contentHTML = '';
+  
+  if (widget.data?.error) {
+    contentHTML = `<div class="widget-error">Error: ${widget.data.error}</div>`;
+  } else {
+    contentHTML = '<div class="widget-content">';
+    contentHTML += renderWidgetData(widget.config?.type, widget.data);
+    contentHTML += '</div>';
+  }
+  
+  widgetCard.innerHTML = `
+    <div class="widget-header">
+      <div class="widget-title-wrapper">
+        <span class="widget-icon">${icon}</span>
+        <h3 class="widget-title">${displayName}</h3>
+      </div>
+    </div>
+    ${contentHTML}
+  `;
+  
+  widgetsContainer.appendChild(widgetCard);
+}
+
+function renderWidgetData(type, data) {
+  if (!data) return '<div class="widget-loading">Loading...</div>';
+  
+  let html = '';
+  
+  switch(type) {
+    case 'qbittorrent':
+      html += renderStat('Download Speed', data.download_speed, true);
+      html += renderStat('Upload Speed', data.upload_speed, true);
+      html += renderStat('Active Downloads', data.active_downloads);
+      html += renderStat('Active Uploads', data.active_uploads);
+      html += renderStat('Total Torrents', data.total_torrents);
+      html += renderStat('Ratio', data.ratio);
+      break;
+      
+    case 'radarr':
+      html += renderStat('Total Movies', data.total_movies);
+      html += renderStat('Downloaded', data.downloaded, true);
+      html += renderStat('Missing', data.missing);
+      html += renderStat('Upcoming', data.upcoming);
+      html += renderStat('In Queue', data.queue_count);
+      html += renderStat('Free Space', data.disk_space);
+      break;
+      
+    case 'sonarr':
+      html += renderStat('Total Series', data.total_series);
+      html += renderStat('Episodes Downloaded', data.downloaded_episodes, true);
+      html += renderStat('Missing Episodes', data.missing_episodes);
+      html += renderStat('Upcoming Episodes', data.upcoming_episodes);
+      html += renderStat('In Queue', data.queue_count);
+      html += renderStat('Free Space', data.disk_space);
+      break;
+      
+    default:
+      html = '<div class="widget-loading">Unknown widget type</div>';
+  }
+  
+  return html;
+}
+
+function renderStat(label, value, highlight = false) {
+  const valueClass = highlight ? 'widget-stat-value widget-stat-highlight' : 'widget-stat-value';
+  return `
+    <div class="widget-stat">
+      <span class="widget-stat-label">${label}:</span>
+      <span class="${valueClass}">${value || 'N/A'}</span>
+    </div>
+  `;
+}
+
+async function refreshWidgets() {
+  const widgetsContainer = document.getElementById('widgets-container');
+  if (!widgetsContainer) return;
+  
+  try {
+    const response = await fetch('/api/widgets');
+    const widgetsData = await response.json();
+    
+    // Update each existing widget
+    Object.entries(widgetsData).forEach(([name, widget]) => {
+      const widgetCard = widgetsContainer.querySelector(`[data-widget-name="${name}"]`);
+      if (widgetCard) {
+        const contentDiv = widgetCard.querySelector('.widget-content');
+        if (contentDiv) {
+          if (widget.data?.error) {
+            contentDiv.innerHTML = `<div class="widget-error">Error: ${widget.data.error}</div>`;
+          } else {
+            contentDiv.innerHTML = renderWidgetData(widget.config?.type, widget.data);
+          }
+        }
+      }
+    });
+  } catch (error) {
+    console.error('Failed to refresh widgets:', error);
+  }
+}
+     section.style.display = '';
     }
   });
 }
