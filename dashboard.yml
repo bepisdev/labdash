@@ -6,11 +6,23 @@ categories:
   - name: "Media"
     description: "Entertainment and media services"
     services:
-      - name: "Plex"
-        url: "http://localhost:32400"
+      - name: "Jellyfin"
+        url: "http://localhost:8096"
         description: "Media streaming server"
-        status_url: "http://localhost:32400/web"
+        status_url: "http://localhost:8096"
         tags: ["streaming", "media"]
+
+      - name: "Radarr"
+        url: "http://localhost:7878"
+        description: "Movie collection manager"
+        status_url: "http://localhost:7878"
+        tags: ["media", "automation", "movies"]
+
+      - name: "Sonarr"
+        url: "http://localhost:8989"
+        description: "TV series collection manager"
+        status_url: "http://localhost:8989"
+        tags: ["media", "automation", "tv"]
 
   - name: "Infrastructure"
     description: "Core infrastructure and networking"

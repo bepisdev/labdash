@@ -1,0 +1,21 @@
+/**
+ * DEPRECATED: This file has been split into modular CSS files
+ * 
+ * The styles have been reorganized as follows:
+ * - base.css - Variables, resets, foundational styles
+ * - layout.css - Container, header, footer, grids
+ * - components.css - Toolbar, filters, tags, errors
+ * - services.css - Service card styles
+ * - widgets.css - Widget card styles
+ * 
+ * This file is kept for reference only and is not loaded by the application.
+ * Please refer to the new modular files in /public/css/
+ */
+
+/* See the new modular structure:
+   - /public/css/base.css
+   - /public/css/layout.css
+   - /public/css/components.css
+   - /public/css/services.css
+   - /public/css/widgets.css
+*/

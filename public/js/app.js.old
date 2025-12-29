@@ -1,0 +1,18 @@
+/**
+ * DEPRECATED: This file has been split into modular files for better organization
+ * 
+ * The functionality has been reorganized as follows:
+ * - filters.js - Tag filtering and search
+ * - services.js - Service status monitoring
+ * - widgets.js - Widget management
+ * - main.js - Application initialization
+ * 
+ * This file is kept for reference only and is not loaded by the application.
+ * Please refer to the new modular files in /public/js/
+ */
+
+// See the new modular structure:
+// - /public/js/filters.js
+// - /public/js/services.js
+// - /public/js/widgets.js
+// - /public/js/main.js

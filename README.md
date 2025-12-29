@@ -346,14 +346,45 @@ labdash/
 │   ├── service_card.erb  # Service card partial
 │   └── error.erb         # Error page
 └── public/
-    ├── css/
-    │   └── styles.css    # Stylesheet
-    └── js/
-        └── app.js        # Frontend JavaScript
+    ├── css/              # Modular stylesheets
+    │   ├── base.css          # Variables, resets, foundational styles
+    │   ├── layout.css        # Container, header, footer, grids
+    │   ├── components.css    # Toolbar, filters, tags, errors
+    │   ├── services.css      # Service card styles
+    │   └── widgets.css       # Widget card styles
+    └── js/               # Modular JavaScript
+        ├── filters.js        # Tag filtering functionality
+        ├── services.js       # Service status monitoring
+        ├── widgets.js        # Widget management
+        └── main.js           # Application initialization
 ```
-    └── js/
-        └── app.js        # Frontend JavaScript
-```
+
+## Architecture
+
+### Frontend Modules
+
+The frontend is organized into modular JavaScript and CSS files for better maintainability:
+
+**JavaScript Modules:**
+- `filters.js` - Handles tag filtering and search functionality
+- `services.js` - Manages service status monitoring and health checks
+- `widgets.js` - Widget initialization, rendering, and data refresh
+- `main.js` - Application entry point and coordination
+
+**CSS Modules:**
+- `base.css` - CSS variables, resets, and foundational styles
+- `layout.css` - Container, header, footer, and grid layouts
+- `components.css` - Reusable components (toolbar, filters, tags)
+- `services.css` - Service card specific styles
+- `widgets.css` - Widget card specific styles
+
+### Backend Structure
+
+The Ruby backend uses Sinatra for routing with a modular widget system:
+- `ConfigLoader` - Validates and loads YAML configuration
+- `WidgetManager` - Manages widget lifecycle and data fetching
+- `BaseWidget` - Parent class for all widgets with common HTTP functionality
+- Individual widget classes - Each service integration (qBittorrent, Radarr, etc.)
 
 ## Development
 

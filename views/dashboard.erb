@@ -4,7 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= title %></title>
-  <link rel="stylesheet" href="/css/styles.css">
+  <!-- CSS Modules -->
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/layout.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/services.css">
+  <link rel="stylesheet" href="/css/widgets.css">
 </head>
 <body<% if config['background_image'] && !config['background_image'].empty? %> style="background-image: url('<%= config['background_image'] %>');"<% end %>>
   <div class="container">
@@ -68,7 +73,11 @@
       <% end %>
     </main>
     
-    <footer>
+   !-- JavaScript Modules -->
+  <script src="/js/filters.js"></script>
+  <script src="/js/services.js"></script>
+  <script src="/js/widgets.js"></script>
+  <script src="/js/main
       <p>LabDash - Homelab Dashboard. Open source on <a href="https://github.com/bepisdev/labdash">Github</a></p>
     </footer>
   </div>
