@@ -39,8 +39,6 @@ module LabDash
       json all_services
     end
     
-    get
-    
     get '/api/widgets' do
       json @widget_manager.fetch_all_data
     end
