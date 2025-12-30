@@ -2,6 +2,10 @@
 
 A lightweight, configurable homelab dashboard built with Ruby and Sinatra. Designed to be deployed as a Docker container with simple YAML-based configuration.
 
+![LabDash](https://img.shields.io/badge/status-active-success)
+![Docker](https://img.shields.io/badge/docker-ready-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 ## Features
 
 - 🎨 Modern, responsive dark theme UI
@@ -9,29 +13,53 @@ A lightweight, configurable homelab dashboard built with Ruby and Sinatra. Desig
 - 🐳 Docker-ready with easy deployment
 - 🔄 Service status monitoring
 - 📂 Category organization
-- 🏷️ Service tagging
+- 🏷️ Service tagging and filtering
 - 🔍 Custom icons support
 - ⚡ Fast and lightweight
-- 📊 Optional widgets for qBittorrent, Radarr, Sonarr, and more
+- 📊 Optional widgets for qBittorrent, Radarr, Sonarr, Jellyfin, Bazarr, Prowlarr, and Lidarr
 
-## Quick Start
+## Installation
 
 ### Using Docker Compose (Recommended)
 
-1. Create a `dashboard.yml` configuration file (see example below)
+1. Create a `dashboard.yml` configuration file (see Configuration section below)
 
-2. Run with docker-compose:
+2. Create a `docker-compose.yml`:
+```yaml
+version: '3.8'
+
+services:
+  labdash:
+    image: labdash:latest
+    container_name: labdash
+    ports:
+      - "4567:4567"
+    volumes:
+      - ./dashboard.yml:/config/dashboard.yml:ro
+    environment:
+      - CONFIG_PATH=/config/dashboard.yml
+      - RACK_ENV=production
+    restart: unless-stopped
+```
+
+3. Start the service:
 ```bash
 docker-compose up -d
 ```
 
-3. Access your dashboard at `http://localhost:4567`
+4. Access your dashboard at `http://localhost:4567`
 
 ### Using Docker
 
 ```bash
 docker build -t labdash .
-docker run -d -p 4567:4567 -v $(pwd)/dashboard.yml:/config/dashboard.yml:ro labdash
+docker run -d \
+  --name labdash \
+  -p 4567:4567 \
+  -v $(pwd)/dashboard.yml:/config/dashboard.yml:ro \
+  -e CONFIG_PATH=/config/dashboard.yml \
+  -e RACK_ENV=production \
+  labdash:latest
 ```
 
 ### Local Development
@@ -53,114 +81,219 @@ Or with auto-reload for development:
 bundle exec rerun 'rackup --host 0.0.0.0 --port 4567'
 ```
 
-## Configuration
+## Quick Start
 
-Create a `dashboard.yml` file to configure your dashboard. Here's a complete example:
+Get up and running in 2 minutes with this minimal configuration:
 
+**dashboard.yml:**
 ```yaml
 title: "My Homelab"
-subtitle: "Central Hub for All Services"
+subtitle: "All my services in one place"
+
+categories:
+  - name: "Media"
+    services:
+      - name: "Plex"
+        url: "http://192.168.1.100:32400"
+        description: "Movie & TV streaming"
+        tags: ["streaming", "media"]
+
+  - name: "Infrastructure"
+    services:
+      - name: "Portainer"
+        url: "http://192.168.1.100:9000"
+        description: "Docker management"
+        tags: ["docker"]
+```
+
+Then run:
+```bash
+docker-compose up -d
+```
+
+## Configuration
+
+### Basic Settings
+
+```yaml
+# Dashboard Settings (Required)
+title: "My Homelab Dashboard"
+subtitle: "Central hub for all your services"  # Optional
+background_image: "https://example.com/bg.jpg"  # Optional
+
+# Categories (Optional but recommended)
+categories:
+  - name: "Media"
+    description: "Entertainment and media services"
+    services:
+      - name: "Service Name"
+        url: "http://service-url:port"
+        description: "Service description"
+        icon: "https://example.com/icon.svg"  # Optional
+        status_url: "http://service-url:port"  # Optional, defaults to url
+        tags: ["tag1", "tag2"]  # Optional
+```
+
+### Configuration Options
+
+#### Dashboard Settings
+- `title` (required): Main dashboard title
+- `subtitle` (optional): Dashboard subtitle
+- `background_image` (optional): URL to background image
+
+#### Categories
+- `name` (required): Category name
+- `description` (optional): Category description
+- `services` (array): List of services in this category
+
+#### Service Options
+- `name` (required): Service name
+- `url` (required): Service URL
+- `description` (optional): Service description
+- `icon` (optional): URL to custom icon
+- `status_url` (optional): URL for status checks (defaults to `url`)
+- `tags` (array, optional): Tags for filtering
+
+### Widgets
+
+Add real-time statistics from your services:
+
+```yaml
+widgets:
+  - name: "Torrent Stats"
+    type: "qbittorrent"
+    url: "http://localhost:8080"
+    username: "admin"  # Optional
+    password: "adminpass"  # Optional
+    enabled: true
+
+  - name: "Movies"
+    type: "radarr"
+    url: "http://localhost:7878"
+    api_key: "your_api_key_here"
+    enabled: true
+
+  - name: "TV Shows"
+    type: "sonarr"
+    url: "http://localhost:8989"
+    api_key: "your_api_key_here"
+    enabled: true
+```
+
+**Supported widget types:**
+- `qbittorrent` - Download/upload stats
+- `radarr` - Movie library statistics
+- `sonarr` - TV show library statistics
+- `jellyfin` - Media server statistics
+- `bazarr` - Subtitle management
+- `prowlarr` - Indexer manager stats
+- `lidarr` - Music library statistics
+
+**Widget Options:**
+- `name` (required): Display name
+- `type` (required): Widget type
+- `url` (required): Service URL
+- `enabled` (optional): Enable/disable (default: true)
+- `api_key` (optional): Required for most widgets except qBittorrent
+- `username` (optional): For basic auth (qBittorrent)
+- `password` (optional): For basic auth (qBittorrent)
+
+### Environment Variables
+
+- `CONFIG_PATH`: Path to configuration file (default: `./dashboard.yml`)
+- `RACK_ENV`: Environment mode (`production` or `development`)
+
+## Complete Configuration Example
+
+```yaml
+title: "My Homelab Dashboard"
+subtitle: "Central hub for all your services"
+background_image: "https://w.wallhaven.cc/full/ne/wallhaven-nevkvw.jpg"
 
 categories:
   - name: "Media"
     description: "Entertainment and media services"
-  - name: "Automation"
-    description: "Home automation and monitoring"
+    services:
+      - name: "Plex"
+        url: "http://192.168.1.100:32400"
+        description: "Media streaming server"
+        icon: "https://www.plex.tv/wp-content/uploads/2022/04/plex-icon.svg"
+        tags: ["streaming", "movies", "tv"]
+
+      - name: "Radarr"
+        url: "http://192.168.1.100:7878"
+        description: "Movie collection manager"
+        tags: ["media", "automation", "movies"]
+
+      - name: "Sonarr"
+        url: "http://192.168.1.100:8989"
+        description: "TV series collection manager"
+        tags: ["media", "automation", "tv"]
+
   - name: "Infrastructure"
-    description: "Core infrastructure services"
-  - name: "Development"
-    description: "Development tools and services"
+    description: "Core infrastructure and networking"
+    services:
+      - name: "Portainer"
+        url: "http://192.168.1.100:9000"
+        description: "Docker container management"
+        tags: ["docker", "management"]
 
-# Optional widgets for displaying real-time data
+      - name: "Pi-hole"
+        url: "http://192.168.1.10/admin"
+        description: "Network-wide ad blocking"
+        tags: ["dns", "ad-blocking"]
+
 widgets:
-  - name: "qBittorrent Stats"
+  - name: "Torrent Stats"
     type: "qbittorrent"
-    url: "http://qbittorrent.local:8080"
+    url: "http://192.168.1.100:8080"
+    username: "admin"
+    password: "adminpass"
     enabled: true
-    # Optional authentication
-    # username: "admin"
-    # password: "adminpass"
 
-  - name: "Radarr Library"
+  - name: "Movies"
     type: "radarr"
-    url: "http://radarr.local:7878"
-    api_key: "your_radarr_api_key_here"
+    url: "http://192.168.1.100:7878"
+    api_key: "your_radarr_api_key"
     enabled: true
 
-  - name: "Sonarr Library"
+  - name: "TV Shows"
     type: "sonarr"
-    url: "http://sonarr.local:8989"
-    api_key: "your_sonarr_api_key_here"
+    url: "http://192.168.1.100:8989"
+    api_key: "your_sonarr_api_key"
     enabled: true
+```
 
-services:
-  # Media Services
-  - name: "Plex"
-    url: "http://plex.local:32400"
-    description: "Media streaming server"
-    category: "Media"
-    icon: "https://www.plex.tv/wp-content/uploads/2022/04/plex-icon.svg"
-    status_url: "http://plex.local:32400/web"
-    tags: ["streaming", "movies", "tv"]
+## Documentation
 
-  - name: "Jellyfin"
-    url: "http://jellyfin.local:8096"
-    description: "Free media streaming"
-    category: "Media"
-    status_url: "http://jellyfin.local:8096"
-    tags: ["streaming", "media"]
+For more detailed information, see the [full documentation](docs/README.md):
 
-  - name: "Sonarr"
-    url: "http://sonarr.local:8989"
-    description: "TV show management"
-    category: "Media"
-    status_url: "http://sonarr.local:8989"
-    tags: ["automation", "tv"]
+- 📖 [Full Documentation](docs/README.md) - Complete guides and references
+- 🔧 [Configuration Guide](docs/configuration.md) - All configuration options
+- 🎨 [Widget Guide](docs/widgets.md) - Widget setup and API keys
+- 🐳 [Deployment Guide](docs/deployment.md) - Docker, Kubernetes, reverse proxy
+- 🏗️ [Architecture](docs/architecture.md) - Technical overview
+- ❓ [Troubleshooting](docs/troubleshooting.md) - Common issues and solutions
 
-  - name: "Radarr"
-    url: "http://radarr.local:7878"
-    description: "Movie management"
-    category: "Media"
-    status_url: "http://radarr.local:7878"
-    tags: ["automation", "movies"]
+## Contributing
 
-  # Automation
-  - name: "Home Assistant"
-    url: "http://homeassistant.local:8123"
-    description: "Home automation platform"
-    category: "Automation"
-    status_url: "http://homeassistant.local:8123"
-    tags: ["smart-home", "automation"]
+Contributions are welcome! Feel free to:
+- 🐛 Report bugs
+- 💡 Suggest new features
+- 🔌 Add support for new services
+- 📝 Improve documentation
 
-  - name: "Grafana"
-    url: "http://grafana.local:3000"
-    description: "Monitoring dashboards"
-    category: "Automation"
-    status_url: "http://grafana.local:3000"
-    tags: ["monitoring", "metrics"]
+## License
 
-  # Infrastructure
-  - name: "Proxmox"
-    url: "https://proxmox.local:8006"
-    description: "Virtualization platform"
-    category: "Infrastructure"
-    tags: ["virtualization", "management"]
+MIT License - Feel free to use and modify as needed!
 
-  - name: "TrueNAS"
-    url: "http://truenas.local"
-    description: "Network storage"
-    category: "Infrastructure"
-    status_url: "http://truenas.local"
-    tags: ["storage", "nas"]
+## Acknowledgments
 
-  - name: "Pi-hole"
-    url: "http://pihole.local/admin"
-    description: "Network-wide ad blocking"
-    category: "Infrastructure"
-    status_url: "http://pihole.local/admin"
-    tags: ["dns", "ad-blocking"]
+Inspired by [Homepage](https://github.com/gethomepage/homepage) and [Organizr](https://github.com/causefx/Organizr).
 
-  # Development
+---
+
+**Built with ❤️ using Ruby and Sinatra**
 - `widgets` (array, optional): Optional widgets for displaying real-time data
 
 #### Service Options
