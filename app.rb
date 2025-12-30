@@ -27,8 +27,8 @@ module LabDash
     get '/' do
       erb :dashboard, locals: { 
         config: @config,
-        title: @config['title'] || 'LabDash',,
-        widgets: @widget_manager.enabled_widgets
+        title: @config['title'] || 'LabDash',
+        widgets: @widget_manager.enabled_widgets,
         categories: @config['categories'] || []
       }
     end
@@ -48,7 +48,9 @@ module LabDash
     get '/api/widgets/:name' do
       widget_name = params[:name]
       json @widget_manager.fetch_widget_data(widget_name)
-    end '/api/config' do
+    end 
+    
+    get '/api/config' do
       json @config
     end
     
