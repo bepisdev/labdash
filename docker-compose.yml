@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   labdash:
-    build: .
+    image: bepisdev/labdash:latest
     container_name: labdash
     ports:
       - "4567:4567"

@@ -48,7 +48,7 @@ volumes:
 ```bash
 docker run -d \
   -v /full/path/to/dashboard.yml:/config/dashboard.yml:ro \
-  labdash:latest
+  bepisdev/labdash:latest
 ```
 
 3. **Verify file exists**:

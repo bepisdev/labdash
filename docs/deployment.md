@@ -15,7 +15,7 @@ version: '3.8'
 
 services:
   labdash:
-    image: labdash:latest
+    image: bepisdev/labdash:latest
     container_name: labdash
     ports:
       - "4567:4567"
@@ -63,7 +63,7 @@ docker run -d \
   -e CONFIG_PATH=/config/dashboard.yml \
   -e RACK_ENV=production \
   --restart unless-stopped \
-  labdash:latest
+  bepisdev/labdash:latest
 ```
 
 ### Custom Port
@@ -82,7 +82,7 @@ docker run -d \
   --name labdash \
   -p 8080:4567 \
   -v $(pwd)/dashboard.yml:/config/dashboard.yml:ro \
-  labdash:latest
+  bepisdev/labdash:latest
 ```
 
 ## Building from Source
@@ -102,14 +102,14 @@ docker run -d \
   --name labdash \
   -p 4567:4567 \
   -v $(pwd)/dashboard.yml:/config/dashboard.yml:ro \
-  labdash:latest
+  bepisdev/labdash:latest
 ```
 
 ### Build with Custom Tag
 
 ```bash
-docker build -t labdash:1.0.0 .
-docker build -t my-registry.com/labdash:latest .
+docker build -t bepisdev/labdash:1.0.0 .
+docker build -t bepisdev/labdash:latest .
 ```
 
 ## Reverse Proxy Configuration
@@ -171,7 +171,7 @@ version: '3.8'
 
 services:
   labdash:
-    image: labdash:latest
+    image: bepisdev/labdash:latest
     container_name: labdash
     volumes:
       - ./dashboard.yml:/config/dashboard.yml:ro
@@ -233,7 +233,7 @@ version: '3.8'
 
 services:
   labdash:
-    image: labdash:latest
+    image: bepisdev/labdash:latest
     ports:
       - "4567:4567"
     volumes:
@@ -269,7 +269,7 @@ docker service create \
   --env CONFIG_PATH=/config/dashboard.yml \
   --env RACK_ENV=production \
   --replicas 1 \
-  labdash:latest
+  bepisdev/labdash:latest
 ```
 
 ### Kubernetes
@@ -293,7 +293,7 @@ spec:
     spec:
       containers:
       - name: labdash
-        image: labdash:latest
+        image: bepisdev/labdash:latest
         ports:
         - containerPort: 4567
         env:
@@ -374,14 +374,14 @@ docker stop labdash
 docker rm labdash
 
 # Pull latest image
-docker pull labdash:latest
+docker pull bepisdev/labdash:latest
 
 # Start new container
 docker run -d \
   --name labdash \
   -p 4567:4567 \
   -v $(pwd)/dashboard.yml:/config/dashboard.yml:ro \
-  labdash:latest
+  bepisdev/labdash:latest
 ```
 
 ## Monitoring

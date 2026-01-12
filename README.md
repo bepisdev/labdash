@@ -30,7 +30,7 @@ version: '3.8'
 
 services:
   labdash:
-    image: labdash:latest
+    image: bepisdev/labdash:latest
     container_name: labdash
     ports:
       - "4567:4567"
@@ -52,14 +52,13 @@ docker-compose up -d
 ### Using Docker
 
 ```bash
-docker build -t labdash .
 docker run -d \
   --name labdash \
   -p 4567:4567 \
   -v $(pwd)/dashboard.yml:/config/dashboard.yml:ro \
   -e CONFIG_PATH=/config/dashboard.yml \
   -e RACK_ENV=production \
-  labdash:latest
+  bepisdev/labdash:latest
 ```
 
 ### Local Development
@@ -424,7 +423,7 @@ version: '3.8'
 
 services:
   labdash:
-    image: labdash:latest
+    image: bepisdev/labdash:latest
     container_name: labdash
     ports:
       - "8080:4567"
